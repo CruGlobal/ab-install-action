@@ -4,8 +4,8 @@ const exec = require("@actions/exec");
 const { waitServiceUp } = require("./util/waitService.js");
 
 async function stackDeploy(folder, stack, images = []) {
-   core.startGroup("Deploy the Stack");
-   const opts = [
+   core.startGroup("Deploy the Stack: UP.sh");
+   /* const opts = [
       "-c",
       "docker-compose.yml",
       "-c",
@@ -14,10 +14,13 @@ async function stackDeploy(folder, stack, images = []) {
       "./test/setup/ci-test.overide.yml",
       stack,
    ];
+   */
 
-   await exec.exec("npm install -g env-cmd");
+   // await exec.exec("npm install -g env-cmd");
 
-   await exec.exec("env-cmd docker stack deploy", opts, { cwd: `./${folder}` });
+   // await exec.exec("env-cmd docker stack deploy", opts, { cwd: `./${folder}` });
+
+   await exec.exec("./UP.sh", [ "-t", "-q" ], { cwd: `./${folder}` });
 
    await waitServiceUp("sails");
 
