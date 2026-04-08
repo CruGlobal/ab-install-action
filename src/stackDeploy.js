@@ -20,7 +20,7 @@ async function stackDeploy(folder, stack, images = []) {
    await exec.exec("env-cmd docker stack deploy", opts, { cwd: `./${folder}` });
    */
 
-   // JOHNNY: I'm now using UP.sh -t -q to deploy the stack
+   // JOHNNY: I'm now using "UP.sh -t -q" to deploy the stack
    await exec.exec("./UP.sh", ["-t", "-q"], { cwd: `./${folder}` });
 
    await waitServiceUp("sails");
