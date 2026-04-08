@@ -12,25 +12,20 @@ const stackDeploy = proxyquire("../src/stackDeploy", {
 
 beforeEach(() => {
    fakeExec.resetHistory();
+   fakeWait.resetHistory();
 });
 
 describe("stackDeploy", () => {
-   it("calls exec", async () => {
+   it("runs UP.sh then docker stack services", async () => {
       await stackDeploy("AppBuilder", "ab");
-      assert.equal(fakeExec.callCount, 3);
-      const [, secondExec, thirdExec] = fakeExec.args;
-      assert.equal(secondExec[0], "env-cmd docker stack deploy");
-      assert.deepEqual(secondExec[1], [
-         "-c",
-         "docker-compose.yml",
-         "-c",
-         "docker-compose.override.yml",
-         "-c",
-         "./test/setup/ci-test.overide.yml",
-         "ab",
-      ]);
-      assert.equal(secondExec[2].cwd, "./AppBuilder");
-      assert.equal(thirdExec[0], "docker stack services");
-      assert.deepEqual(thirdExec[1], ["ab"]);
+      assert.equal(fakeExec.callCount, 2);
+      const [upSh, stackServices] = fakeExec.args;
+      assert.equal(upSh[0], "./UP.sh");
+      assert.deepEqual(upSh[1], ["-t", "-q"]);
+      assert.equal(upSh[2].cwd, "./AppBuilder");
+      assert.equal(stackServices[0], "docker stack services");
+      assert.deepEqual(stackServices[1], ["ab"]);
+      assert.equal(fakeWait.callCount, 1);
+      assert.equal(fakeWait.firstCall.args[0], "sails");
    });
 });
