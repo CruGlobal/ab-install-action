@@ -5,7 +5,7 @@ const { waitServiceUp } = require("./util/waitService.js");
 
 async function stackDeploy(folder, stack, images = []) {
    core.startGroup("Deploy the Stack");
-   const opts = [
+   /* const opts = [
       "-c",
       "docker-compose.yml",
       "-c",
@@ -18,6 +18,10 @@ async function stackDeploy(folder, stack, images = []) {
    await exec.exec("npm install -g env-cmd");
 
    await exec.exec("env-cmd docker stack deploy", opts, { cwd: `./${folder}` });
+   */
+
+   // JOHNNY: I'm now using "UP.sh -t -q" to deploy the stack
+   await exec.exec("./UP.sh", ["-t", "-q"], { cwd: `./${folder}` });
 
    await waitServiceUp("sails");
 
@@ -25,7 +29,7 @@ async function stackDeploy(folder, stack, images = []) {
       const shortName = images[i].replace("ab_service_", "");
 
       await exec.exec(
-         `docker service update --image ${images[i]}:test ${stack}_${shortName}`
+         `docker service update --image ${images[i]}:test ${stack}_${shortName}`,
       );
    }
 
