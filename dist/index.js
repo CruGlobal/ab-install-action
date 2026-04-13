@@ -4128,7 +4128,7 @@ async function stackDeploy(folder, stack, images = []) {
       const shortName = images[i].replace("ab_service_", "");
 
       await exec.exec(
-         `docker service update --image ${images[i]}:test ${stack}_${shortName}`,
+         `docker service update --image ${images[i]}:test test_${stack}_${shortName}`,
       );
    }
 
