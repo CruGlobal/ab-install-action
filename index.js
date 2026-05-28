@@ -22,9 +22,9 @@ async function run() {
             await rebuildService([repo.name]);
             break;
          case "appbuilder":
-         // JOHNNY: I'm now including ab_service_web in our ab_platform_service rebuild.
-         // await rebuildService(abServices);
-         // break;
+            // JOHNNY: I'm now including ab_service_web in our normal rebuild.
+            // await rebuildService(abServices);
+            // break;
          case "core":
             await rebuildService(["ab_service_web", ...abServices]);
             break;

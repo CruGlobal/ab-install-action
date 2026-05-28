@@ -4103,7 +4103,7 @@ const exec = __nccwpck_require__(1514);
 const { waitServiceUp } = __nccwpck_require__(2529);
 
 async function stackDeploy(folder, stack, images = []) {
-   core.startGroup("Deploy the Stack");
+   core.startGroup("Deploy the Stack: UP.sh");
    /* const opts = [
       "-c",
       "docker-compose.yml",
@@ -4113,14 +4113,13 @@ async function stackDeploy(folder, stack, images = []) {
       "./test/setup/ci-test.overide.yml",
       stack,
    ];
-
-   await exec.exec("npm install -g env-cmd");
-
-   await exec.exec("env-cmd docker stack deploy", opts, { cwd: `./${folder}` });
    */
 
-   // JOHNNY: I'm now using "UP.sh -t -q" to deploy the stack
-   await exec.exec("./UP.sh", ["-t", "-q"], { cwd: `./${folder}` });
+   // await exec.exec("npm install -g env-cmd");
+
+   // await exec.exec("env-cmd docker stack deploy", opts, { cwd: `./${folder}` });
+
+   await exec.exec("./UP.sh", [ "-t", "-q" ], { cwd: `./${folder}` });
 
    await waitServiceUp("sails");
 
@@ -4360,9 +4359,9 @@ async function run() {
             await rebuildService([repo.name]);
             break;
          case "appbuilder":
-         // JOHNNY: I'm now including ab_service_web in our ab_platform_service rebuild.
-         // await rebuildService(abServices);
-         // break;
+            // JOHNNY: I'm now including ab_service_web in our normal rebuild.
+            // await rebuildService(abServices);
+            // break;
          case "core":
             await rebuildService(["ab_service_web", ...abServices]);
             break;
